@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CinePrompt | Story to Video Builder</title>
-    <meta name="description" content="Biến cốt truyện thành video 45 giây với nhân vật đồng bộ 100%">
+    <title>CinePrompt | Story to Video</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -15,41 +14,26 @@
         }
 
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #141414;
-            --bg-tertiary: #1a1a1a;
-            --bg-input: #1f1f1f;
-            --bg-hover: #2a2a2a;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --text-muted: #666666;
-            --accent: #8b5cf6;
-            --accent-hover: #a78bfa;
+            --bg: #0a0a0a;
+            --bg-card: #141414;
+            --bg-input: #1a1a1a;
+            --bg-hover: #222;
+            --text: #fff;
+            --text-secondary: #888;
+            --text-muted: #555;
             --border: #2a2a2a;
-            --border-focus: #3a3a3a;
-        }
-
-        html,
-        body {
-            height: 100%;
+            --accent: #8b5cf6;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
-        }
-
-        /* Main Layout */
-        .app {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
-        /* Top Bar */
-        .top-bar {
+        /* Header */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -59,54 +43,25 @@
             left: 0;
             right: 0;
             z-index: 100;
-            background: transparent;
+            background: var(--bg);
         }
 
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-text {
+        .logo {
             font-size: 14px;
             font-weight: 500;
             color: var(--text-secondary);
         }
 
-        .logo-text span {
-            color: var(--text-muted);
-        }
-
-        .breadcrumb {
+        .tabs {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .breadcrumb svg {
-            width: 16px;
-            height: 16px;
-            opacity: 0.5;
-        }
-
-        /* Tab Switcher */
-        .tab-switcher {
-            display: inline-flex;
             background: var(--bg-input);
             border-radius: 8px;
             padding: 4px;
-            gap: 4px;
         }
 
-        .tab-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: transparent;
+        .tab {
+            padding: 8px 20px;
+            background: none;
             border: none;
             border-radius: 6px;
             font-family: inherit;
@@ -117,46 +72,16 @@
             transition: all 0.2s;
         }
 
-        .tab-btn:hover {
-            color: var(--text-primary);
+        .tab:hover {
+            color: var(--text);
         }
 
-        .tab-btn.active {
+        .tab.active {
             background: var(--bg-hover);
-            color: var(--text-primary);
+            color: var(--text);
         }
 
-        .tab-btn svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Right Actions */
-        .actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 13px;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        .search-box:hover {
-            border-color: var(--border-focus);
-        }
-
-        .icon-btn {
+        .settings-btn {
             width: 36px;
             height: 36px;
             display: flex;
@@ -167,122 +92,87 @@
             border-radius: 8px;
             color: var(--text-secondary);
             cursor: pointer;
-            transition: all 0.2s;
         }
 
-        .icon-btn:hover {
+        .settings-btn:hover {
             background: var(--bg-hover);
-            color: var(--text-primary);
+            color: var(--text);
         }
 
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 100px 24px 200px;
+        /* Main */
+        .main {
+            padding: 80px 24px 180px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero {
             text-align: center;
-        }
-
-        .hero-text {
-            font-size: 20px;
-            font-weight: 400;
+            padding: 60px 0;
             color: var(--text-secondary);
-            margin-bottom: 40px;
-            letter-spacing: -0.3px;
+            font-size: 18px;
         }
 
-        /* Output Area */
-        .output-area {
-            width: 100%;
-            max-width: 900px;
+        .hero.hidden {
             display: none;
         }
 
-        .output-area.active {
+        /* Output */
+        .output {
+            display: none;
+        }
+
+        .output.active {
             display: block;
         }
 
-        .scene-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        .scene-card {
-            background: var(--bg-secondary);
+        .output-title {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Scene Cards */
+        .scenes {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .scene {
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
             overflow: hidden;
-            transition: all 0.2s;
-        }
-
-        .scene-card:hover {
-            border-color: var(--border-focus);
-            transform: translateY(-2px);
         }
 
         .scene-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 16px;
+            padding: 14px 18px;
             border-bottom: 1px solid var(--border);
         }
 
         .scene-title {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
-            color: var(--text-primary);
         }
 
-        .scene-badge {
-            font-size: 11px;
-            padding: 4px 8px;
-            background: var(--bg-hover);
-            border-radius: 4px;
-            color: var(--text-muted);
-        }
-
-        .scene-content {
-            padding: 14px 16px;
-        }
-
-        .prompt-text {
-            font-size: 12px;
-            line-height: 1.6;
-            color: var(--text-secondary);
-            max-height: 120px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .prompt-text::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .prompt-text::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 2px;
-        }
-
-        .scene-actions {
-            display: flex;
-            justify-content: flex-end;
-            padding: 10px 16px;
-            border-top: 1px solid var(--border);
-        }
-
-        .btn-copy {
+        .scene-copy {
             display: flex;
             align-items: center;
             gap: 6px;
             padding: 6px 12px;
-            background: transparent;
+            background: none;
             border: 1px solid var(--border);
             border-radius: 6px;
             font-family: inherit;
@@ -292,25 +182,78 @@
             transition: all 0.2s;
         }
 
-        .btn-copy:hover {
+        .scene-copy:hover {
             background: var(--bg-hover);
-            color: var(--text-primary);
+            color: var(--text);
         }
 
-        .btn-copy.copied {
+        .scene-copy.copied {
             background: rgba(34, 197, 94, 0.1);
-            border-color: rgba(34, 197, 94, 0.3);
             color: #22c55e;
+            border-color: rgba(34, 197, 94, 0.3);
         }
 
-        /* Bottom Prompt Box */
+        .scene-content {
+            padding: 16px 18px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .scene-content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .scene-content::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        /* Character Highlight */
+        .character-embedded {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 3px solid var(--accent);
+            padding: 12px 16px;
+            margin: 16px 18px;
+            border-radius: 0 8px 8px 0;
+            font-size: 12px;
+            color: var(--accent);
+        }
+
+        /* Video Master Prompt */
+        .master-prompt {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .master-prompt h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .master-prompt-content {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+        }
+
+        /* Prompt Box */
         .prompt-container {
             position: fixed;
             bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             width: calc(100% - 48px);
-            max-width: 680px;
+            max-width: 700px;
             z-index: 100;
         }
 
@@ -319,82 +262,43 @@
             border: 1px solid var(--border);
             border-radius: 16px;
             overflow: hidden;
-            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .prompt-box:focus-within {
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 1px var(--border-focus);
-        }
-
-        .prompt-header {
+        .prompt-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 16px;
+            padding: 10px 16px;
             border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-muted);
         }
 
         .prompt-mode {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             padding: 6px 12px;
             background: var(--bg-hover);
             border: none;
             border-radius: 6px;
             font-family: inherit;
             font-size: 12px;
-            font-weight: 500;
-            color: var(--text-primary);
+            color: var(--text);
             cursor: pointer;
         }
 
-        .prompt-mode svg {
-            width: 14px;
-            height: 14px;
-        }
-
-        .prompt-settings {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .setting-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .setting-item select {
-            background: transparent;
-            border: none;
-            font-family: inherit;
-            font-size: 12px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            outline: none;
-        }
-
-        .setting-item select option {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-        }
-
-        .prompt-input-area {
-            padding: 14px 16px;
+        .prompt-input-wrap {
+            padding: 12px 16px;
         }
 
         .prompt-input {
             width: 100%;
-            background: transparent;
+            background: none;
             border: none;
             font-family: inherit;
             font-size: 14px;
-            color: var(--text-primary);
+            color: var(--text);
             resize: none;
             outline: none;
             line-height: 1.5;
@@ -404,94 +308,43 @@
             color: var(--text-muted);
         }
 
-        .prompt-footer {
+        .prompt-bottom {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             padding: 10px 16px;
             border-top: 1px solid var(--border);
         }
 
-        .prompt-actions-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .prompt-info {
+            font-size: 11px;
+            color: var(--text-muted);
         }
 
-        .add-btn {
-            width: 32px;
-            height: 32px;
+        .send-btn {
+            width: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--bg-hover);
+            background: var(--text);
             border: none;
-            border-radius: 8px;
-            color: var(--text-secondary);
+            border-radius: 10px;
+            color: var(--bg);
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .add-btn:hover {
-            background: var(--border);
-            color: var(--text-primary);
-        }
-
-        .prompt-actions-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .expand-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            background: transparent;
-            border: none;
-            font-family: inherit;
-            font-size: 13px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .expand-btn:hover {
-            color: var(--text-primary);
-        }
-
-        .generate-btn {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--text-primary);
-            border: none;
-            border-radius: 8px;
-            color: var(--bg-primary);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .generate-btn:hover {
-            opacity: 0.9;
+        .send-btn:hover {
             transform: scale(1.05);
         }
 
-        .generate-btn:disabled {
+        .send-btn:disabled {
             opacity: 0.5;
-            transform: none;
             cursor: not-allowed;
+            transform: none;
         }
 
-        .generate-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Spinner */
         .spinner {
             width: 18px;
             height: 18px;
@@ -507,30 +360,36 @@
             }
         }
 
-        /* Footer Note */
-        .footer-note {
+        /* Settings Panel */
+        .overlay {
             position: fixed;
-            bottom: 8px;
-            left: 24px;
-            font-size: 11px;
-            color: var(--text-muted);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
         }
 
-        /* Modal/Sidebar for Settings */
-        .settings-panel {
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings {
             position: fixed;
             top: 0;
-            right: -400px;
-            width: 400px;
+            right: -420px;
+            width: 420px;
             height: 100%;
-            background: var(--bg-secondary);
+            background: var(--bg-card);
             border-left: 1px solid var(--border);
-            z-index: 200;
-            transition: right 0.3s ease;
+            z-index: 300;
+            transition: right 0.3s;
             overflow-y: auto;
         }
 
-        .settings-panel.open {
+        .settings.open {
             right: 0;
         }
 
@@ -553,16 +412,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: transparent;
+            background: none;
             border: none;
-            border-radius: 6px;
             color: var(--text-secondary);
             cursor: pointer;
+            border-radius: 6px;
         }
 
         .close-btn:hover {
             background: var(--bg-hover);
-            color: var(--text-primary);
+            color: var(--text);
         }
 
         .settings-body {
@@ -570,15 +429,18 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .form-label {
             display: block;
             font-size: 13px;
             font-weight: 500;
-            color: var(--text-primary);
             margin-bottom: 8px;
+        }
+
+        .form-label .required {
+            color: #ef4444;
         }
 
         .form-hint {
@@ -595,13 +457,13 @@
             border-radius: 8px;
             font-family: inherit;
             font-size: 14px;
-            color: var(--text-primary);
-            transition: border-color 0.2s;
+            color: var(--text);
+            transition: border 0.2s;
         }
 
         .form-input:focus {
             outline: none;
-            border-color: var(--border-focus);
+            border-color: var(--accent);
         }
 
         .form-input::placeholder {
@@ -609,9 +471,43 @@
         }
 
         textarea.form-input {
-            min-height: 120px;
+            min-height: 140px;
             resize: vertical;
             line-height: 1.5;
+        }
+
+        .form-input.error {
+            border-color: #ef4444;
+        }
+
+        .slider-wrap {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .slider-wrap input[type="range"] {
+            flex: 1;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            appearance: none;
+        }
+
+        .slider-wrap input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--text);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            font-size: 24px;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
         }
 
         .form-select {
@@ -622,67 +518,16 @@
             border-radius: 8px;
             font-family: inherit;
             font-size: 14px;
-            color: var(--text-primary);
+            color: var(--text);
             cursor: pointer;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
         }
 
         .form-select option {
-            background: var(--bg-secondary);
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .slider-container input[type="range"] {
-            flex: 1;
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            appearance: none;
-            outline: none;
-        }
-
-        .slider-container input[type="range"]::-webkit-slider-thumb {
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            background: var(--text-primary);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .slider-value {
-            font-size: 20px;
-            font-weight: 600;
-            min-width: 30px;
-            text-align: center;
-            color: var(--text-primary);
-        }
-
-        /* Overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 150;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-        }
-
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
+            background: var(--bg-card);
         }
 
         /* Toast */
@@ -691,16 +536,15 @@
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            padding: 12px 20px;
-            background: var(--bg-secondary);
+            padding: 12px 24px;
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 8px;
             font-size: 13px;
-            color: var(--text-primary);
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s;
-            z-index: 300;
+            z-index: 400;
         }
 
         .toast.show {
@@ -719,59 +563,16 @@
             color: #22c55e;
         }
 
-        /* View Toggle in Output */
-        .output-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .output-title {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        .view-toggle {
-            display: flex;
-            background: var(--bg-input);
-            border-radius: 6px;
-            padding: 3px;
-        }
-
-        .view-btn {
-            padding: 6px 12px;
-            background: transparent;
-            border: none;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 12px;
+        .footer {
+            position: fixed;
+            bottom: 8px;
+            left: 24px;
+            font-size: 11px;
             color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.2s;
         }
 
-        .view-btn.active {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .top-bar {
-                padding: 12px 16px;
-            }
-
-            .search-box {
-                display: none;
-            }
-
-            .prompt-container {
-                width: calc(100% - 32px);
-            }
-
-            .settings-panel {
+            .settings {
                 width: 100%;
                 right: -100%;
             }
@@ -780,149 +581,82 @@
 </head>
 
 <body>
-    <!-- App Container -->
-    <div class="app">
-        <!-- Top Bar -->
-        <header class="top-bar">
-            <div class="logo-section">
-                <div class="breadcrumb">
-                    <span class="logo-text">CinePrompt</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6" />
-                    </svg>
-                    <span>Story Builder</span>
-                </div>
+    <!-- Header -->
+    <header class="header">
+        <span class="logo">CinePrompt</span>
+        <div class="tabs">
+            <button class="tab active" data-view="image" onclick="switchTab('image')">🖼️ Images</button>
+            <button class="tab" data-view="video" onclick="switchTab('video')">🎬 Videos</button>
+        </div>
+        <button class="settings-btn" onclick="openSettings()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
+                <path
+                    d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+            </svg>
+        </button>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+        <div class="hero" id="hero">
+            <p>Type your story below to generate cinematic prompts</p>
+        </div>
+
+        <!-- Image Output -->
+        <div class="output" id="imageOutput">
+            <div class="output-header">
+                <span class="output-title">Image Prompts for Banana/Gemini</span>
             </div>
+            <div class="scenes" id="imageScenes"></div>
+        </div>
 
-            <div class="tab-switcher">
-                <button class="tab-btn active" onclick="switchView('image')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" />
-                        <circle cx="8.5" cy="8.5" r="1.5" />
-                        <path d="M21 15l-5-5L5 21" />
-                    </svg>
-                    Images
-                </button>
-                <button class="tab-btn" onclick="switchView('video')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="2" width="20" height="20" rx="2.18" />
-                        <path d="M10 8l6 4-6 4V8z" />
-                    </svg>
-                    Videos
-                </button>
+        <!-- Video Output -->
+        <div class="output" id="videoOutput">
+            <div class="output-header">
+                <span class="output-title">Video Prompts for Google Flow</span>
             </div>
+            <div id="videoContent"></div>
+        </div>
+    </main>
 
-            <div class="actions">
-                <div class="search-box">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="M21 21l-4.35-4.35" />
-                    </svg>
-                    Search prompts...
-                </div>
-                <button class="icon-btn" onclick="toggleSettings()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3" />
-                        <path
-                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                    </svg>
-                </button>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <p class="hero-text" id="heroText">Type in the prompt box to start</p>
-
-            <!-- Output Area -->
-            <div class="output-area" id="outputArea">
-                <div class="output-header">
-                    <span class="output-title" id="outputTitle">Image Prompts</span>
-                    <div class="view-toggle">
-                        <button class="view-btn active">Grid</button>
-                        <button class="view-btn">List</button>
-                    </div>
-                </div>
-                <div class="scene-grid" id="sceneGrid"></div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Bottom Prompt Box -->
+    <!-- Prompt Box -->
     <div class="prompt-container">
         <div class="prompt-box">
-            <div class="prompt-header">
-                <button class="prompt-mode">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" />
-                        <path d="M3 9h18M9 21V9" />
-                    </svg>
-                    Story to Prompts
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        style="width:12px;height:12px;margin-left:4px">
+            <div class="prompt-top">
+                <button class="prompt-mode" onclick="openSettings()">
+                    📖 Story to Prompts
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M6 9l6 6 6-6" />
                     </svg>
                 </button>
-                <div class="prompt-settings">
-                    <div class="setting-item">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                            <path d="M2 17l10 5 10-5" />
-                            <path d="M2 12l10 5 10-5" />
-                        </svg>
-                        <select id="modelSelect">
-                            <option value="gemini-3-flash-preview">Gemini 3</option>
-                            <option value="gemini-2.5-flash-lite-nothinking">Gemini 2.5</option>
-                            <option value="gpt-4o-mini">GPT-4o Mini</option>
-                            <option value="gpt-4o">GPT-4o</option>
-                        </select>
-                    </div>
-                    <div class="setting-item">
-                        <span id="sceneLabel">5 scenes</span>
-                    </div>
-                </div>
+                <span id="configInfo">⚙️ Click to configure</span>
             </div>
-            <div class="prompt-input-area">
+            <div class="prompt-input-wrap">
                 <textarea class="prompt-input" id="storyInput" rows="2"
-                    placeholder="Describe your story with scenes and characters..."></textarea>
+                    placeholder="Describe your cinematic story... (Ctrl+Enter to send)"></textarea>
             </div>
-            <div class="prompt-footer">
-                <div class="prompt-actions-left">
-                    <button class="add-btn" onclick="toggleSettings()" title="Settings">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="prompt-actions-right">
-                    <button class="expand-btn" onclick="toggleSettings()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                        </svg>
-                        Expand
-                    </button>
-                    <button class="generate-btn" id="generateBtn" onclick="generatePrompts()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
+            <div class="prompt-bottom">
+                <span class="prompt-info" id="promptInfo"></span>
+                <button class="send-btn" id="sendBtn" onclick="generate()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
 
-    <span class="footer-note">CinePrompt • key4u.shop</span>
+    <span class="footer">key4u.shop</span>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="closeSettings()"></div>
 
     <!-- Settings Panel -->
-    <div class="overlay" id="overlay" onclick="toggleSettings()"></div>
-    <div class="settings-panel" id="settingsPanel">
+    <div class="settings" id="settings">
         <div class="settings-header">
-            <span class="settings-title">Story Settings</span>
-            <button class="close-btn" onclick="toggleSettings()">
+            <span class="settings-title">⚙️ Settings</span>
+            <button class="close-btn" onclick="closeSettings()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
@@ -930,31 +664,15 @@
         </div>
         <div class="settings-body">
             <div class="form-group">
-                <label class="form-label">Project Title</label>
-                <input type="text" class="form-input" id="storyTitle" placeholder="My Cinematic Story">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Number of Scenes</label>
-                <div class="slider-container">
-                    <input type="range" id="sceneCount" min="3" max="10" value="5" oninput="updateSceneLabel()">
-                    <span class="slider-value" id="sceneValue">5</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Character Bible <span class="form-hint">(For 100% consistency)</span></label>
-                <textarea class="form-input" id="characterDescription" placeholder="Describe your character in detail:
-• Age, gender, body type
-• Hair: color, style (e.g., long black hair)
-• Outfit: navy coat, red scarf
-• Props: ring, brown leather bag"></textarea>
+                <label class="form-label">API Key <span class="required">*</span> <span class="form-hint">(from
+                        key4u.shop)</span></label>
+                <input type="password" class="form-input" id="apiKey" placeholder="sk-xxxxx...">
             </div>
 
             <div class="form-group">
                 <label class="form-label">AI Model</label>
-                <select class="form-select" id="modelSelectPanel" onchange="syncModel()">
-                    <option value="gemini-3-flash-preview">🚀 Gemini 3 Flash Preview</option>
+                <select class="form-select" id="modelSelect">
+                    <option value="gemini-3-flash-preview">🚀 Gemini 3 Flash (Best)</option>
                     <option value="gemini-2.5-flash-lite-nothinking">⚡ Gemini 2.5 Flash Lite</option>
                     <option value="gpt-4o-mini">💬 GPT-4o Mini</option>
                     <option value="gpt-4o">🧠 GPT-4o</option>
@@ -963,8 +681,30 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">API Key <span class="form-hint">(from key4u.shop)</span></label>
-                <input type="password" class="form-input" id="apiKey" placeholder="sk-xxxxx...">
+                <label class="form-label">Project Title</label>
+                <input type="text" class="form-input" id="projectTitle" placeholder="My Cinematic Video">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Number of Scenes</label>
+                <div class="slider-wrap">
+                    <input type="range" id="sceneCount" min="3" max="10" value="5" oninput="updateSceneCount()">
+                    <span class="slider-value" id="sceneValue">5</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">👤 Character Bible <span class="required">*</span></label>
+                <textarea class="form-input" id="characterBible" placeholder="QUAN TRỌNG - Mô tả nhân vật chi tiết:
+
+• Tên: Linh
+• Tuổi: 25, nữ, dáng mảnh
+• Tóc: đen dài đến vai, thẳng mượt
+• Mắt: nâu đậm, lông mi dài
+• Trang phục: áo khoác xanh navy, quần jean đen, giày sneaker trắng
+• Phụ kiện: khăn quàng đỏ, túi xách da nâu
+• Biểu cảm mặc định: sâu lắng, hơi buồn
+• Color palette: navy, đỏ đậm, trắng ngà"></textarea>
             </div>
         </div>
     </div>
@@ -973,55 +713,91 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        let currentView = 'image';
+        let currentTab = 'image';
+        let outputData = { image: [], video: null };
 
-        function switchView(view) {
-            currentView = view;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.closest('.tab-btn').classList.add('active');
-            document.getElementById('outputTitle').textContent = view === 'image' ? 'Image Prompts' : 'Video Prompts';
-            renderOutput();
+        // Check settings on load
+        function updateConfigInfo() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const character = document.getElementById('characterBible').value.trim();
+            const info = document.getElementById('configInfo');
+            const scenes = document.getElementById('sceneCount').value;
+
+            if (!apiKey || !character) {
+                info.textContent = '⚠️ Settings required';
+                info.style.color = '#ef4444';
+            } else {
+                info.textContent = `${scenes} scenes • Ready`;
+                info.style.color = '#888';
+            }
         }
 
-        function toggleSettings() {
-            document.getElementById('settingsPanel').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('active');
+        function updateSceneCount() {
+            document.getElementById('sceneValue').textContent = document.getElementById('sceneCount').value;
+            updateConfigInfo();
         }
 
-        function updateSceneLabel() {
-            const value = document.getElementById('sceneCount').value;
-            document.getElementById('sceneValue').textContent = value;
-            document.getElementById('sceneLabel').textContent = value + ' scenes';
+        document.getElementById('apiKey').addEventListener('input', updateConfigInfo);
+        document.getElementById('characterBible').addEventListener('input', updateConfigInfo);
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-view="${tab}"]`).classList.add('active');
+
+            document.getElementById('imageOutput').classList.toggle('active', tab === 'image');
+            document.getElementById('videoOutput').classList.toggle('active', tab === 'video');
         }
 
-        function syncModel() {
-            document.getElementById('modelSelect').value = document.getElementById('modelSelectPanel').value;
+        function openSettings() {
+            document.getElementById('settings').classList.add('open');
+            document.getElementById('overlay').classList.add('active');
         }
 
-        function showToast(message, type = '') {
+        function closeSettings() {
+            document.getElementById('settings').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+            updateConfigInfo();
+        }
+
+        function showToast(msg, type = '') {
             const toast = document.getElementById('toast');
-            toast.textContent = message;
+            toast.textContent = msg;
             toast.className = 'toast show ' + type;
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        let promptData = { image: [], video: [] };
-
-        async function generatePrompts() {
+        async function generate() {
             const story = document.getElementById('storyInput').value.trim();
             const apiKey = document.getElementById('apiKey').value.trim();
+            const character = document.getElementById('characterBible').value.trim();
             const model = document.getElementById('modelSelect').value;
-            const title = document.getElementById('storyTitle').value.trim() || 'Untitled';
+            const title = document.getElementById('projectTitle').value.trim() || 'Untitled';
             const sceneCount = document.getElementById('sceneCount').value;
-            const character = document.getElementById('characterDescription').value.trim();
 
-            if (!story) return showToast('Please enter your story', 'error');
-            if (!apiKey) {
-                toggleSettings();
-                return showToast('Please enter API key in settings', 'error');
+            // Validate - Open settings if missing
+            if (!apiKey || !character) {
+                openSettings();
+                if (!apiKey) {
+                    document.getElementById('apiKey').classList.add('error');
+                    showToast('⚠️ Please enter API Key', 'error');
+                }
+                if (!character) {
+                    document.getElementById('characterBible').classList.add('error');
+                    showToast('⚠️ Please describe your character', 'error');
+                }
+                return;
             }
 
-            const btn = document.getElementById('generateBtn');
+            if (!story) {
+                showToast('⚠️ Please enter your story', 'error');
+                return;
+            }
+
+            // Clear error states
+            document.querySelectorAll('.form-input.error').forEach(el => el.classList.remove('error'));
+
+            const btn = document.getElementById('sendBtn');
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span>';
 
@@ -1035,121 +811,158 @@
                     body: JSON.stringify({
                         model: model,
                         messages: [
-                            { role: 'system', content: 'You are a cinematic prompt expert for AI image and video generation.' },
-                            { role: 'user', content: buildPrompt(title, story, character, sceneCount) }
+                            { role: 'system', content: getSystemPrompt() },
+                            { role: 'user', content: buildUserPrompt(title, story, character, sceneCount) }
                         ],
                         max_tokens: 8000,
-                        temperature: 0.8
+                        temperature: 0.7
                     })
                 });
 
-                if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error?.message || `Error ${response.status}`);
+                }
 
                 const data = await response.json();
-                parseResponse(data.choices[0].message.content);
+                parseOutput(data.choices[0].message.content, character);
 
-                document.getElementById('heroText').style.display = 'none';
-                document.getElementById('outputArea').classList.add('active');
-                showToast('✓ Prompts generated successfully', 'success');
+                document.getElementById('hero').classList.add('hidden');
+                document.getElementById('imageOutput').classList.add('active');
+                showToast('✓ Prompts generated!', 'success');
 
             } catch (error) {
-                showToast('Error: ' + error.message, 'error');
+                showToast('❌ ' + error.message, 'error');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
             }
         }
 
-        function buildPrompt(title, story, character, sceneCount) {
-            return `Create ${sceneCount} cinematic prompts for: "${title}"
+        function getSystemPrompt() {
+            return `Bạn là AI Director chuyên tạo prompts cho Banana AI (image) và Google Flow Veo 3.1 (video).
 
-STORY: ${story}
-
-CHARACTER: ${character || 'Create consistent character'}
+QUAN TRỌNG:
+1. PHẢI lồng CHARACTER BIBLE vào ĐẦU mỗi prompt để đảm bảo nhân vật đồng bộ 100%
+2. Mỗi scene CHỈ có 1 prompt duy nhất (gộp positive + negative + style)
+3. Phần video chỉ cần 1 MASTER PROMPT để nối tất cả scenes
 
 OUTPUT FORMAT:
-===SCENE [N] - IMAGE===
-**Name:** [scene name]
-**PROMPT:** [detailed 150-200 word prompt for Banana/Gemini with subject, scene, lighting, camera, style]
-**NEGATIVE:** [things to avoid]
 
-===SCENE [N] - VIDEO===
-**INITIAL:** [8-second video prompt with identity, cinematography, environment, performance, audio layers]
-**EXTEND:** [5 extend prompts for 45s total]
+### IMAGE PROMPTS ###
+[SCENE 1: Tên cảnh]
+[Character Bible được lồng vào đây], [bối cảnh], [hành động], [ánh sáng], [góc máy], [phong cách]. Negative: [những gì tránh].
 
-RULES: Reuse exact character tokens, lock wardrobe, maintain color palette.`;
+[SCENE 2: Tên cảnh]
+...
+
+### VIDEO MASTER PROMPT ###
+[1 prompt duy nhất để dùng trong Google Flow "Ingredients to Video", mô tả:
+- Character identity locked (copy từ Character Bible)
+- Cách nối các scenes
+- Camera movements
+- Color palette consistency
+- Audio mood
+- Transition style giữa các scenes]
+
+### EXTEND PROMPTS ###
+[5-6 prompts ngắn để extend video từ 8s lên 45s, mỗi cái ~30 từ, bắt đầu bằng "Continue:"]`;
         }
 
-        function parseResponse(content) {
-            promptData = { image: [], video: [] };
+        function buildUserPrompt(title, story, character, sceneCount) {
+            return `PROJECT: "${title}"
 
-            const imageScenes = content.split(/===SCENE \d+ - IMAGE===/).slice(1);
-            imageScenes.forEach((block, i) => {
-                const nameMatch = block.match(/\*\*Name:\*\*\s*(.+)/);
-                const promptMatch = block.match(/\*\*PROMPT:\*\*\s*([\s\S]*?)(?=\*\*NEGATIVE:|$)/);
-                const negativeMatch = block.match(/\*\*NEGATIVE:\*\*\s*([\s\S]*?)(?=---|===|$)/);
+STORY:
+${story}
 
-                promptData.image.push({
-                    name: nameMatch ? nameMatch[1].trim() : `Scene ${i + 1}`,
-                    prompt: promptMatch ? promptMatch[1].replace(/\*\*/g, '').trim() : '',
-                    negative: negativeMatch ? negativeMatch[1].replace(/\*\*/g, '').trim() : ''
+CHARACTER BIBLE (BẮT BUỘC LỒNG VÀO MỖI PROMPT):
+${character}
+
+Tạo ${sceneCount} scenes. Mỗi image prompt PHẢI bắt đầu bằng character description.`;
+        }
+
+        function parseOutput(content, character) {
+            outputData = { image: [], video: null, extend: null, character: character };
+
+            // Parse image prompts
+            const imageSection = content.split('### VIDEO')[0];
+            const sceneMatches = imageSection.matchAll(/\[SCENE (\d+):\s*([^\]]+)\]\s*([\s\S]*?)(?=\[SCENE|\n###|$)/gi);
+
+            for (const match of sceneMatches) {
+                outputData.image.push({
+                    num: match[1],
+                    name: match[2].trim(),
+                    prompt: match[3].trim()
                 });
-            });
+            }
 
-            const videoScenes = content.split(/===SCENE \d+ - VIDEO===/).slice(1);
-            videoScenes.forEach((block, i) => {
-                const initialMatch = block.match(/\*\*INITIAL:\*\*\s*([\s\S]*?)(?=\*\*EXTEND:|$)/);
-                const extendMatch = block.match(/\*\*EXTEND:\*\*\s*([\s\S]*?)(?=---|===|$)/);
+            // Parse video master prompt
+            const videoMatch = content.match(/### VIDEO MASTER PROMPT ###\s*([\s\S]*?)(?=### EXTEND|$)/i);
+            if (videoMatch) {
+                outputData.video = videoMatch[1].trim();
+            }
 
-                promptData.video.push({
-                    name: `Scene ${i + 1}`,
-                    initial: initialMatch ? initialMatch[1].replace(/\*\*/g, '').trim() : '',
-                    extend: extendMatch ? extendMatch[1].replace(/\*\*/g, '').trim() : ''
-                });
-            });
+            // Parse extend prompts
+            const extendMatch = content.match(/### EXTEND PROMPTS ###\s*([\s\S]*?)$/i);
+            if (extendMatch) {
+                outputData.extend = extendMatch[1].trim();
+            }
 
             renderOutput();
         }
 
         function renderOutput() {
-            const grid = document.getElementById('sceneGrid');
-            grid.innerHTML = '';
+            // Render images
+            const imageContainer = document.getElementById('imageScenes');
+            imageContainer.innerHTML = '';
 
-            const data = currentView === 'image' ? promptData.image : promptData.video;
-
-            data.forEach((scene, i) => {
-                if (currentView === 'image') {
-                    grid.innerHTML += createCard(i + 1, scene.name, 'Prompt', scene.prompt, 'img-' + i);
-                    if (scene.negative) {
-                        grid.innerHTML += createCard(i + 1, scene.name, 'Negative', scene.negative, 'neg-' + i);
-                    }
-                } else {
-                    grid.innerHTML += createCard(i + 1, scene.name, 'Initial 8s', scene.initial, 'vid-' + i);
-                    if (scene.extend) {
-                        grid.innerHTML += createCard(i + 1, scene.name, 'Extend', scene.extend, 'ext-' + i);
-                    }
-                }
+            outputData.image.forEach((scene, i) => {
+                imageContainer.innerHTML += `
+                    <div class="scene">
+                        <div class="scene-header">
+                            <span class="scene-title">Scene ${scene.num}: ${escapeHtml(scene.name)}</span>
+                            <button class="scene-copy" onclick="copyPrompt(this, 'img-${i}')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                Copy
+                            </button>
+                        </div>
+                        <div class="character-embedded">👤 Character: ${escapeHtml(outputData.character.substring(0, 100))}...</div>
+                        <div class="scene-content" id="img-${i}">${escapeHtml(scene.prompt)}</div>
+                    </div>
+                `;
             });
-        }
 
-        function createCard(num, name, type, content, id) {
-            return `
-                <div class="scene-card">
-                    <div class="scene-header">
-                        <span class="scene-title">Scene ${num}: ${escapeHtml(name)}</span>
-                        <span class="scene-badge">${type}</span>
-                    </div>
-                    <div class="scene-content">
-                        <div class="prompt-text" id="${id}">${escapeHtml(content)}</div>
-                    </div>
-                    <div class="scene-actions">
-                        <button class="btn-copy" onclick="copyText('${id}', this)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            // Render video
+            const videoContainer = document.getElementById('videoContent');
+            videoContainer.innerHTML = '';
+
+            if (outputData.video) {
+                videoContainer.innerHTML = `
+                    <div class="master-prompt">
+                        <h3>🎬 Master Prompt for Google Flow (Ingredients to Video)</h3>
+                        <button class="scene-copy" onclick="copyPrompt(this, 'master-video')" style="float:right;margin-top:-32px">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                             Copy
                         </button>
+                        <div class="master-prompt-content" id="master-video">${escapeHtml(outputData.video)}</div>
                     </div>
-                </div>
-            `;
+                `;
+            }
+
+            if (outputData.extend) {
+                videoContainer.innerHTML += `
+                    <div class="scene">
+                        <div class="scene-header">
+                            <span class="scene-title">🔄 Extend Prompts (8s → 45s)</span>
+                            <button class="scene-copy" onclick="copyPrompt(this, 'extend-prompts')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                Copy All
+                            </button>
+                        </div>
+                        <div class="scene-content" id="extend-prompts">${escapeHtml(outputData.extend)}</div>
+                    </div>
+                `;
+            }
         }
 
         function escapeHtml(text) {
@@ -1157,13 +970,13 @@ RULES: Reuse exact character tokens, lock wardrobe, maintain color palette.`;
             return text.replace(/[&<>"']/g, m => map[m]);
         }
 
-        function copyText(id, btn) {
+        function copyPrompt(btn, id) {
             const text = document.getElementById(id).textContent;
             navigator.clipboard.writeText(text).then(() => {
-                btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Copied';
+                btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Copied!';
                 btn.classList.add('copied');
                 setTimeout(() => {
-                    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';
+                    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy';
                     btn.classList.remove('copied');
                 }, 2000);
             });
@@ -1177,8 +990,11 @@ RULES: Reuse exact character tokens, lock wardrobe, maintain color palette.`;
 
         // Keyboard shortcut
         document.addEventListener('keydown', e => {
-            if (e.ctrlKey && e.key === 'Enter') generatePrompts();
+            if (e.ctrlKey && e.key === 'Enter') generate();
         });
+
+        // Init
+        updateConfigInfo();
     </script>
 </body>
 
